@@ -15,7 +15,7 @@ public class DBWrapper {
 	private String driver = "com.mysql.jdbc.Driver";
 	private String url = "jdbc:mysql://localhost/Spiele?user=?password=?&useSSL=false";
 	private String user = "root";
-	private String pw = "Donaudampfschiff";
+	private String pw;
 	private String sql;
 			
 	public void connectDB() throws Exception
