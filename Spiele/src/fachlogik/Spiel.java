@@ -7,6 +7,7 @@ public class Spiel {
 	private int id;
 	private String name;
 	private Date ge;
+	
 	public int getId() {
 		return id;
 	}

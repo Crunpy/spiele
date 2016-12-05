@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
 
 public class DBWrapper {
 
@@ -52,6 +53,15 @@ public class DBWrapper {
 		pstmt = con.prepareStatement(sql);
 		
 		rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			int id = rs.getInt("ID");
+			String name = rs.getString("Name");
+			Date geb = rs.getDate("Geb");
+			
+			System.out.println(id + "\t" + name + "\t" + geb);
+		}
 		
 	}
 }
