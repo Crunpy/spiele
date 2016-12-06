@@ -12,8 +12,6 @@ public class DBWrapper {
 	private ResultSet rs;
 	private Connection con;
 	private PreparedStatement pstmt;
-	
-	private String init = "DROP DATABASE IF EXISTS Spiele;";
 
 	private String driver = "com.mysql.jdbc.Driver";
 	private String url = "jdbc:mysql://localhost/Spiele?user=?password=?&useSSL=false";
@@ -21,25 +19,6 @@ public class DBWrapper {
 	private String pw;
 	private String sql;
 
-	public DBWrapper()
-	{
-		init += "CREATE DATABASE Spiele;\n";
-
-		init += "USE Spiele;\n";
-
-		init += "CREATE TABLE Spiel\n";
-		init += "(\n";
-		init += "	ID INT PRIMARY KEY,\n";
-		init += "   Name VARCHAR(50),\n";
-		init += "    Geb DATE\n";
-		init += ");\t";
-		init += "INSERT INTO Spiel(ID, Name, Geb) VALUES\n";
-		init += "(1, 'Halo', '2002-03-14'),\n";
-		init += "(2, 'Red Dead Redemption', '2010-05-21'),\n";
-		init += "(3, 'Mass Effect', '2007-11-21'),\n";
-		init += "(4, 'League of Legends','2009-10-27'),\n";
-		init += "(5, 'Diablo 3', '2014-08-19');\n";
-	}
 			
 	public void connectDB() throws Exception
 	{
@@ -87,11 +66,6 @@ public class DBWrapper {
 		}
 	}
 	
-	public void fill() throws Exception
-	{
-		pstmt = con.prepareStatement(init);
-		pstmt.execute();
-	}
 	
 	public ArrayList<Spiel> getSpiele() throws Exception
 	{
