@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-import fachlogik.DBWrapper;
 import fachlogik.Spiel;
 import gui.SpieleEditor;
 import javax.swing.JSplitPane;
@@ -20,6 +19,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.ListSelectionListener;
+
+import datenbank.DBWrapper;
+
 import javax.swing.event.ListSelectionEvent;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -32,6 +34,10 @@ public class SpieleDialog extends JDialog {
 	private ArrayList<Spiel> games;
 	
 	private JList<Spiel> spieleListe = new JList<Spiel>();
+	public JList<Spiel> getSpieleListe() {
+		return spieleListe;
+	}
+
 	DefaultListModel<Spiel> spielModel;
 	
 	private DBWrapper database;
@@ -92,12 +98,22 @@ public class SpieleDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						close();
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						close();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -134,6 +150,23 @@ public class SpieleDialog extends JDialog {
 					});
 					mnSpiel.add(mntmSpielHinzufgen);
 				}
+				{
+					JMenuItem mntmSpielLschen = new JMenuItem("Spiel l\u00F6schen");
+					mntmSpielLschen.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							Spiel s = getSpieleListe().getSelectedValue();
+							try {
+								database.connectDB();
+								database.deleteSpiel(s);
+								database.disconnectDB();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+					mnSpiel.add(mntmSpielLschen);
+				}
 			}
 		}
 		
@@ -152,14 +185,19 @@ public class SpieleDialog extends JDialog {
 		this.games = games;
 	}
 	
-	public void aktualisieren()
+	public void aktualisieren() throws Exception
 	{
 		spielModel.clear();
-		ArrayList<Spiel> gameslist = getGames();
+		ArrayList<Spiel> gameslist = database.getSpiele();
 		
 		for(Spiel s: gameslist)
 		{
 			spielModel.addElement(s);
 		}	
+	}
+	
+	public void close()
+	{
+		this.dispose();	
 	}
 }

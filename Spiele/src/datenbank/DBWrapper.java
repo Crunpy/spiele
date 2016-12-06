@@ -1,10 +1,14 @@
-package fachlogik;
+package datenbank;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
+import fachlogik.Spiel;
+import gui.SpieleDialog;
+
 import java.sql.Date;
 
 public class DBWrapper {
@@ -91,14 +95,39 @@ public class DBWrapper {
 	
 	public void addSpiel(Spiel s) throws Exception
 	{
-		sql = "INSERT INTO Spiel(ID, Name, Geb) VALUES ?, '?', '?'";
+		int nextID = 0;
+		
+		sql = "SELECT ID, Name, Geb FROM Spiel";
+		pstmt = con.prepareStatement(sql);
+		
+		rs = pstmt.executeQuery();
+		
+		if(rs.last())
+		{
+			nextID = rs.getInt("ID") + 1;
+		}
+		
+		sql = "INSERT INTO Spiel(ID, Name, Geb) VALUES (?, ?, ?);";
+		
+		pstmt = con.prepareStatement(sql);
+		
+		pstmt.setInt(1, nextID);
+		pstmt.setString(2, s.getName());
+		pstmt.setDate(3, new java.sql.Date(s.getGe().getTime()));
+		
+		pstmt.executeUpdate();
+	}
+	
+	public void deleteSpiel(Spiel s) throws Exception
+	{
+		
+		
+		sql = "DELETE FROM Spiel WHERE ID = ?;";
 		
 		pstmt = con.prepareStatement(sql);
 		
 		pstmt.setInt(1, s.getId());
-		pstmt.setString(2, s.getName());
-		pstmt.setDate(3, (Date) s.getGe());
 		
-		pstmt.executeQuery();
+		pstmt.executeUpdate();
 	}
 }

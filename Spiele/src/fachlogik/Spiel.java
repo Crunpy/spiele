@@ -12,8 +12,8 @@ public class Spiel {
 	
 	public Spiel()
 	{
-		setId(nextID);
-		setName("Spielname");
+		setId(0);
+		setName("Neu");
 		setGe(new Date());
 	}
 	

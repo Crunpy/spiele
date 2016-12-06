@@ -2,7 +2,7 @@ package demo;
 
 import javax.swing.JDialog;
 
-import fachlogik.DBWrapper;
+import datenbank.DBWrapper;
 import gui.SpieleDialog;
 
 public class Demo {
