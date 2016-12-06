@@ -12,12 +12,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
+import fachlogik.DBWrapper;
 import fachlogik.Spiel;
 import gui.SpieleEditor;
 import javax.swing.JSplitPane;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 public class SpieleDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -27,13 +33,15 @@ public class SpieleDialog extends JDialog {
 	
 	private JList<Spiel> spieleListe = new JList<Spiel>();
 	DefaultListModel<Spiel> spielModel;
+	
+	private DBWrapper database;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			SpieleDialog dialog = new SpieleDialog();
+			SpieleDialog dialog = new SpieleDialog(new DBWrapper());
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -44,18 +52,25 @@ public class SpieleDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public SpieleDialog() {
+	public SpieleDialog(DBWrapper db){
 		setBounds(100, 100, 550, 300);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBorder(new EmptyBorder(6, 6, 6, 6));
+		this.database = db;
 		
 		spielModel = new DefaultListModel<>();
+		spieleListe.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				editor.showSpiel(spieleListe.getSelectedValue());
+			}
+		});
 		spieleListe.setModel(spielModel);
 		
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		{
 			JSplitPane splitPane = new JSplitPane();
+			splitPane.setDividerLocation(200);
 			contentPanel.add(splitPane);
 			{
 				JScrollPane scrollPane = new JScrollPane();
@@ -64,10 +79,9 @@ public class SpieleDialog extends JDialog {
 					scrollPane.setViewportView(spieleListe);
 				}
 				
-				JPanel panel = new JPanel();
-				splitPane.setRightComponent(panel);
+				splitPane.setRightComponent(editor);
 				{
-					panel.add(editor);
+					//panel.add(editor);
 				}
 			}
 		}
@@ -96,10 +110,33 @@ public class SpieleDialog extends JDialog {
 				menuBar.add(mnSpiel);
 				{
 					JMenuItem mntmSpielHinzufgen = new JMenuItem("Spiel hinzuf\u00FCgen");
+					mntmSpielHinzufgen.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							try
+							{
+								db.connectDB();
+								db.addSpiel(new Spiel());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							finally
+							{
+								try {
+									db.disconnectDB();
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+					});
 					mnSpiel.add(mntmSpielHinzufgen);
 				}
 			}
 		}
+		
 	}
 
 	public SpieleEditor getEditor()
@@ -113,5 +150,16 @@ public class SpieleDialog extends JDialog {
 
 	public void setGames(ArrayList<Spiel> games) {
 		this.games = games;
+	}
+	
+	public void aktualisieren()
+	{
+		spielModel.clear();
+		ArrayList<Spiel> gameslist = getGames();
+		
+		for(Spiel s: gameslist)
+		{
+			spielModel.addElement(s);
+		}	
 	}
 }

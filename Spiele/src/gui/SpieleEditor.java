@@ -9,6 +9,8 @@ import javax.swing.SpinnerDateModel;
 import fachlogik.Spiel;
 
 import javax.swing.JSpinner;
+import javax.swing.JSpinner.DateEditor;
+import java.awt.Component;
 
 public class SpieleEditor extends JPanel {
 	private JTextField textField;
@@ -33,7 +35,8 @@ public class SpieleEditor extends JPanel {
 		
 		JSpinner spinner = new JSpinner();
 		spinner.setModel(spinnerModel);
-		spinner.setEditor(new JSpinner.DateEditor(spinner, "yyyy.MM.dd"));
+		DateEditor de_spinner = new JSpinner.DateEditor(spinner, "dd.MM.yyyy");
+		spinner.setEditor(de_spinner);
 		add(spinner);
 	}
 	

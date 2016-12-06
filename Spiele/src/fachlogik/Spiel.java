@@ -8,6 +8,15 @@ public class Spiel {
 	private String name;
 	private Date ge;
 	
+	private int nextID;
+	
+	public Spiel()
+	{
+		setId(nextID);
+		setName("Spielname");
+		setGe(new Date());
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -25,5 +34,19 @@ public class Spiel {
 	}
 	public void setGe(Date ge) {
 		this.ge = ge;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return name;
+	}
+
+	public int getNextID() {
+		return nextID;
+	}
+
+	public void setNextID(int nextID) {
+		this.nextID = nextID;
 	}
 }

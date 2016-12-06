@@ -69,8 +69,7 @@ public class DBWrapper {
 	public ArrayList<Spiel> getSpiele() throws Exception
 	{
 		
-		ArrayList<Spiel> games = new ArrayList<Spiel>()
-				;
+		ArrayList<Spiel> games = new ArrayList<Spiel>();
 		sql = "SELECT ID, Name, Geb FROM Spiel";
 		pstmt = con.prepareStatement(sql);
 		
@@ -87,5 +86,18 @@ public class DBWrapper {
 		}
 		
 		return games;
+	}
+	
+	public void addSpiel(Spiel s) throws Exception
+	{
+		sql = "INSERT INTO Spiel(ID, Name, Geb) VALUES ?, '?', '?'";
+		
+		pstmt = con.prepareStatement(sql);
+		
+		pstmt.setInt(1, s.getId());
+		pstmt.setString(2, s.getName());
+		pstmt.setDate(3, (Date) s.getGe());
+		
+		pstmt.executeQuery();
 	}
 }

@@ -20,8 +20,9 @@ public class Demo {
 			db.printAll();
 			
 			try {
-				SpieleDialog dialog = new SpieleDialog();
+				SpieleDialog dialog = new SpieleDialog(db);
 				dialog.setGames(db.getSpiele());
+				dialog.aktualisieren();
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 			} catch (Exception e) {
