@@ -1,0 +1,19 @@
+DROP DATABASE IF EXISTS Spiele;
+
+CREATE DATABASE Spiele;
+
+USE Spiele;
+
+CREATE TABLE Spiel
+(
+	ID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Geb DATE
+);
+
+INSERT INTO Spiel(ID, Name, Geb) VALUES
+(1, 'Halo', '2002-03-14'),
+(2, 'Red Dead Redemption', '2010-05-21'),
+(3, 'Mass Effect', '2007-11-21'),
+(4, 'League of Legends','2009-10-27'),
+(5, 'Diablo 3', '2014-08-19');
