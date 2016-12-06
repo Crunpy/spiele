@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.sql.Date;
 
 public class DBWrapper {
@@ -63,5 +64,28 @@ public class DBWrapper {
 			System.out.println(id + "\t" + name + "\t" + geb);
 		}
 		
+	}
+	
+	public ArrayList<Spiel> getSpiele() throws Exception
+	{
+		
+		ArrayList<Spiel> games = new ArrayList<Spiel>()
+				;
+		sql = "SELECT ID, Name, Geb FROM Spiel";
+		pstmt = con.prepareStatement(sql);
+		
+		rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			Spiel s = new Spiel();
+			s.setId(rs.getInt("ID"));
+			s.setName(rs.getString("Name"));
+			s.setGe(rs.getDate("Geb"));
+			
+			games.add(s);
+		}
+		
+		return games;
 	}
 }

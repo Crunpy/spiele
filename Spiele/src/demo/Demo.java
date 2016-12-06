@@ -1,6 +1,9 @@
 package demo;
 
+import javax.swing.JDialog;
+
 import fachlogik.DBWrapper;
+import gui.SpieleDialog;
 
 public class Demo {
 
@@ -15,6 +18,15 @@ public class Demo {
 		{
 			db.connectDB();
 			db.printAll();
+			
+			try {
+				SpieleDialog dialog = new SpieleDialog();
+				dialog.setGames(db.getSpiele());
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		finally
